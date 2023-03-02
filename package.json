@@ -1,0 +1,24 @@
+{
+  "name": "twitter-backend-ios",
+  "version": "0.0.1",
+  "description": "Backend For My New Ios App ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [
+    "backend",
+    "ios",
+    "twitter"
+  ],
+  "author": "Dev Adnani",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.18.2",
+    "mongoose": "^7.0.0",
+    "nodemon": "^2.0.20",
+    "validator": "^13.9.0"
+  }
+}

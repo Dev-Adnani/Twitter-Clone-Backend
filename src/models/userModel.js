@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 const userSchema = new mongoose.Schema(
     {
@@ -9,6 +10,12 @@ const userSchema = new mongoose.Schema(
             required:true,
             trim:true,
         },
+        tokens:[{
+            token:{
+                type:String,
+                required:true,
+            }
+        }],
         username:{
             type:String,
             unique:true,
@@ -101,6 +108,35 @@ userSchema.pre('save',async function(next) {
     next()
 })
 
+
+// Create Tokens
+userSchema.methods.generateAuthToken = async function(){
+    const user = this
+    
+    const token = jwt.sign({_id:user._id.toString() },'twitter')
+    user.tokens = user.tokens.concat({token});
+
+    await user.save();
+}
+
+
+// Authentication 
+userSchema.statics.findByCredentials = async (email,password) =>
+{
+    const user = await User.findOne({email});
+    if(!user)
+    {
+        throw new Error('Email Doesnt Exists');
+    }
+
+    const isMatch = await bcrypt.compare(password,user.password);
+    if(!isMatch)
+    {
+        throw new Error('Wrong Password');
+    }
+
+    return user;
+}
 
 const User = mongoose.model('User',userSchema)
 module.exports = User

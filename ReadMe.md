@@ -11,17 +11,22 @@ This repository contains the code for the backend of a Twitter clone built with 
 To run this app locally, you'll need to have Node.js and MongoDB installed.
 
 Once you have Node.js and MongoDB installed, you can clone this repository to your local machine using the following command:
-```bash git clone https://github.com/Dev-Adnani/Twitter-Clone-Backend.git```
+
+```bash
+  git clone https://github.com/Dev-Adnani/Twitter-Clone-Backend.git
+```
 
 Next, navigate to the repository and install the dependencies using the following command:
 
-```bash npm install```
-
+```bash
+  npm install
+```
 
 Finally, start the server using the following command:
 
-```bash npm run dev``
-
+```bash
+  npm run dev
+```
 ## Usage
 
 This backend is designed to work in conjunction with the Twitter-Clone-Swift front-end app. To use this backend, you'll need to set the `API_BASE_URL` variable in the Twitter-Clone-Swift project to the URL of your local server.

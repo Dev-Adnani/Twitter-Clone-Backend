@@ -30,10 +30,23 @@ userRouter.get("/users/specific/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) {
-      const msg = "User Doesnt Exists";
-      res.status(404).send(msg);
+      throw new Error("User Does'nt Exists");
     }
     res.send(user);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+userRouter.get("/user/specificAvatar/:id", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user || !user.avatar) {
+      throw new Error("User Does'nt Exists");
+    }
+    
+    res.set('Content-Type','image/jpg')
+    res.send(user.avatar);
   } catch (error) {
     res.status(500).send(error);
   }

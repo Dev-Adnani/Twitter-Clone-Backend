@@ -174,7 +174,7 @@ userRouter.delete("/users/del/:id", async (req, res) => {
   }
 });
 
-
+//Update User
 userRouter.patch('/users/me',auth,async (req,res) =>
 {
   const updates = Object.keys(req.body);

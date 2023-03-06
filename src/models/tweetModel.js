@@ -27,7 +27,7 @@ const tweetSchema = new mongoose.Schema({
         type:Buffer,
         required:false,
     },
-    username:{
+    likes:{
         type:Array,
         default:[],
     },

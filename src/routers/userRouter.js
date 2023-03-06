@@ -7,14 +7,12 @@ const auth = require("../middleware/authMiddleware");
 const userRouter = new express.Router();
 
 //Helper
-
 const imgUpload = multer({
   limits: {
     fileSize: 10000000,
   },
 });
 
-//---------------GET------------//
 //Fetch User
 userRouter.get("/users/all", async (req, res) => {
   try {
@@ -38,6 +36,8 @@ userRouter.get("/users/specific/:id", async (req, res) => {
   }
 });
 
+
+//Get Specific Avatar User
 userRouter.get("/user/specificAvatar/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -51,10 +51,7 @@ userRouter.get("/user/specificAvatar/:id", async (req, res) => {
     res.status(500).send(error);
   }
 });
-//---------------GET ENDS------------//
 
-
-//---------------POST -----------------//
 
 //Create User
 userRouter.post("/users/signup", async (req, res) => {
@@ -108,11 +105,8 @@ userRouter.post("/users/me/avatar" ,auth ,imgUpload.single("avatar"), async (req
   }
 );
 
-//---------------POST ENDS-----------------//
 
-//---------------PUT-----------------//
-
-
+//Follow Users
 userRouter.put("/users/:id/follow" , auth ,async (req, res) => {
   
   if(req.user.id != req.params.id)
@@ -139,6 +133,7 @@ userRouter.put("/users/:id/follow" , auth ,async (req, res) => {
   }
 });
 
+//unFollow Users
 userRouter.put("/users/:id/unfollow" , auth ,async (req, res) => {
   
   if(req.user.id != req.params.id)
@@ -164,9 +159,8 @@ userRouter.put("/users/:id/unfollow" , auth ,async (req, res) => {
     res.status(403).json("You Cannot UnFollow Yourself ")
   }
 });
-//---------------PUT ENDS-----------------//
 
-//delete
+//Delete User
 userRouter.delete("/users/del/:id", async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
@@ -180,6 +174,34 @@ userRouter.delete("/users/del/:id", async (req, res) => {
   }
 });
 
+
+userRouter.patch('/users/me',auth,async (req,res) =>
+{
+  const updates = Object.keys(req.body);
+  console.log(updates);
+
+  const allowUpdates = ['name','email','password','website','bio','location']
+
+  const isValidOp = updates.every((update) => allowUpdates.includes(update));
+ 
+  if(!isValidOp) 
+  {
+    return res.status(400).send({error : "Invalid Request"})
+  }
+  else
+  {
+    try {
+
+      const user = req.user;
+      updates.forEach((update) => {user[update] =req.body[update]})
+      await user.save();
+      res.send(user)
+
+    } catch (error) {
+          return res.status(400).send(error)
+    }
+  }
+})
 
 
 module.exports = userRouter;

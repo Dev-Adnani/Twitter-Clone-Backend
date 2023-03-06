@@ -127,7 +127,7 @@ userRouter.put("/users/:id/follow" , auth ,async (req, res) => {
       }
       else
       {
-        res.status(200).json("Your Are Already Following The User");
+        res.status(403).json("Your Are Already Following The User");
       }
     } catch (error) {
       res.status(500).json(error)
@@ -136,6 +136,32 @@ userRouter.put("/users/:id/follow" , auth ,async (req, res) => {
   else
   {
     res.status(403).json("You Cannot Follow Yourself ")
+  }
+});
+
+userRouter.put("/users/:id/unfollow" , auth ,async (req, res) => {
+  
+  if(req.user.id != req.params.id)
+  {
+    try {
+      const user = await User.findById(req.params.id); 
+      if(user.followers.includes(req.user.id))
+      {
+        await user.updateOne({$pull:{followers:req.user.id}});
+        await req.user.updateOne({$pull:{followings:req.params.id}});
+        res.status(200).json("User Has Been Unfollowed");
+      }
+      else
+      {
+        res.status(403).json("Your Are Not Following The User!");
+      }
+    } catch (error) {
+      res.status(500).json(error)
+    }
+  }
+  else
+  {
+    res.status(403).json("You Cannot UnFollow Yourself ")
   }
 });
 //---------------PUT ENDS-----------------//

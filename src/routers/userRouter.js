@@ -178,8 +178,6 @@ userRouter.delete("/users/del/:id", async (req, res) => {
 userRouter.patch('/users/me',auth,async (req,res) =>
 {
   const updates = Object.keys(req.body);
-  console.log(updates);
-
   const allowUpdates = ['name','email','password','website','bio','location']
 
   const isValidOp = updates.every((update) => allowUpdates.includes(update));
